@@ -223,3 +223,14 @@ a {
     grid-template-columns: 1fr;
   }
 }
+
+.about-text {
+  max-width: 760px;
+}
+
+.about-text p {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 18px;
+}
+
