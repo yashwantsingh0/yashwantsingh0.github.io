@@ -234,3 +234,127 @@ a {
   font-size: 18px;
 }
 
+
+.education-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 32px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.education-card h3 {
+  margin: 16px 0 4px;
+  font-size: 25px;
+}
+
+.education-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.education-status {
+  color: var(--muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.record-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.record {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 26px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.record:hover {
+  background: var(--surface-hover);
+  transform: translateX(5px);
+}
+
+.record h3 {
+  margin: 5px 0 0;
+  font-size: 18px;
+}
+
+.record-arrow {
+  color: var(--muted);
+  font-size: 20px;
+}
+
+@media (max-width: 600px) {
+  .education-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+.record p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.record-disabled {
+  cursor: default;
+}
+
+.record-disabled:hover {
+  transform: none;
+}
+
+.record-label {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+
+.document-note {
+  padding: 32px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.document-note h2 {
+  margin: 14px 0 8px;
+  font-size: 25px;
+  letter-spacing: -0.03em;
+}
+
+.document-note p {
+  max-width: 700px;
+  margin: 0;
+  color: var(--muted);
+}
+
+@media (max-width: 600px) {
+  .record {
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .record-label {
+    margin-top: 4px;
+  }
+
+  .document-note {
+    padding: 26px;
+  }
+}
