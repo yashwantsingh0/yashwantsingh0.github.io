@@ -1,0 +1,1056 @@
+/* =========================================================
+   BCAS MEDAL TALLY — MAIN STYLESHEET
+   =========================================================
+   This file controls the complete visual appearance
+   of the Medal Tally webpage.
+
+   HTML  → index.html
+   CSS   → styles.css
+   JS    → script.js
+
+   Main sections:
+   1. Global settings
+   2. Page background
+   3. Side label
+   4. Header and logos
+   5. Point system
+   6. Medal table
+   7. Table colours and rankings
+   8. Buttons and footer
+   9. Responsive/tablet design
+   10. Mobile design
+
+   IMPORTANT:
+   All medal-table body text is explicitly BLACK.
+   ========================================================= */
+
+
+/* =========================================================
+   1. GLOBAL SETTINGS & COLOUR VARIABLES
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+
+  /* Main purple theme */
+  --purple: #4b1978;
+  --purple-dark: #351050;
+  --purple-light: #6c3197;
+
+  /* Table borders */
+  --line: #bfc2c6;
+
+  /* Default text colour */
+  --text: #111111;
+
+  /* Ranking change colours */
+  --green: #1b9447;
+  --red: #c51f25;
+
+  /* Medal colours */
+  --gold: #f1c62d;
+  --silver: #d9dde1;
+  --bronze: #c98d50;
+}
+
+
+/* =========================================================
+   2. BODY / PAGE BACKGROUND
+   ========================================================= */
+
+body {
+
+  margin: 0;
+
+  min-height: 100vh;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  /* Default page text colour */
+  color: var(--text);
+
+  /* Light professional background */
+  background:
+    radial-gradient(
+      circle at 78% 35%,
+      rgba(75, 25, 120, .07),
+      transparent 28%
+    ),
+
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f7f7f7 55%,
+      #ffffff 100%
+    );
+}
+
+
+/* =========================================================
+   3. MAIN PAGE LAYOUT
+   ========================================================= */
+
+.page-shell {
+
+  min-height: 100vh;
+
+  display: flex;
+}
+
+
+/* =========================================================
+   4. LEFT / SIDE TOURNAMENT LABEL
+   ========================================================= */
+
+.side-label {
+
+  width: 82px;
+
+  flex: 0 0 82px;
+
+  /* Purple vertical background */
+  background: linear-gradient(
+    180deg,
+    #551b82,
+    #421366
+  );
+
+  border-radius: 0 0 20px 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+
+/* Text inside the vertical label */
+
+.side-label span {
+
+  color: #ffffff;
+
+  font-size: 24px;
+
+  letter-spacing: .5px;
+
+  /* Makes the text vertical */
+  writing-mode: vertical-rl;
+
+  transform: rotate(180deg);
+
+  text-align: center;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   5. MAIN CONTENT CONTAINER
+   ========================================================= */
+
+.content {
+
+  width: min(100%, 1180px);
+
+  margin: 0 auto;
+
+  padding: 24px 28px 22px;
+}
+
+
+/* =========================================================
+   6. HEADER — LOGOS + COLLEGE NAME
+   ========================================================= */
+
+.header {
+
+  display: grid;
+
+  grid-template-columns: 115px 1fr 115px;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+
+/* College / society logos */
+
+.logo {
+
+  width: 105px;
+
+  height: 105px;
+
+  object-fit: cover;
+
+  border-radius: 50%;
+
+  justify-self: center;
+
+  filter:
+    drop-shadow(
+      0 2px 2px rgba(0,0,0,.15)
+    );
+}
+
+
+/* Main heading container */
+
+.heading {
+
+  text-align: center;
+}
+
+
+/* College name */
+
+.heading h1 {
+
+  margin: 0;
+
+  font-size: clamp(22px, 3vw, 35px);
+
+  line-height: 1.08;
+
+  font-weight: 800;
+}
+
+
+/* Medal tally subtitle */
+
+.subtitle {
+
+  margin-top: 10px;
+
+  font-size: clamp(16px, 2vw, 23px);
+}
+
+
+/* Last updated text */
+
+.updated {
+
+  margin-top: 3px;
+
+  font-size: 16px;
+}
+
+
+/* =========================================================
+   7. POINT SYSTEM BAR
+   ========================================================= */
+
+.points-bar {
+
+  margin: 18px 0 8px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  font-size: 17px;
+}
+
+
+/* Gold text in point system */
+
+.gold-text {
+
+  color: #b38a00;
+
+  font-weight: 700;
+}
+
+
+/* Silver text in point system */
+
+.silver-text {
+
+  color: #6f777d;
+
+  font-weight: 700;
+}
+
+
+/* Bronze text in point system */
+
+.bronze-text {
+
+  color: #9a5b26;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   8. SAVE & UPDATE RANKINGS BUTTON
+   ========================================================= */
+
+.status {
+
+  background: #ccefd2;
+
+  color: #185d2a;
+
+  padding: 8px 14px;
+
+  border-radius: 9px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  border: none;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 15px;
+}
+
+
+/* Save button hover effect */
+
+.status:hover {
+
+  background: #b8e6c1;
+}
+
+
+/* Disabled save button */
+
+.status:disabled {
+
+  cursor: default;
+
+  opacity: .8;
+}
+
+
+/* =========================================================
+   9. MEDAL TABLE CONTAINER
+   ========================================================= */
+
+.table-card {
+
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+
+/* Horizontal scrolling wrapper */
+
+.table-wrap {
+
+  overflow-x: auto;
+
+  border: 1px solid #aaa;
+
+  border-radius: 8px;
+
+  /* Always keep table background white */
+  background: #ffffff;
+}
+
+
+/* =========================================================
+   10. TABLE BASE
+   ========================================================= */
+
+table {
+
+  width: 100%;
+
+  min-width: 850px;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+
+  font-size: 18px;
+
+  /* IMPORTANT:
+     All table text defaults to BLACK */
+  color: #000000;
+}
+
+
+/* =========================================================
+   11. TABLE CELLS
+   ========================================================= */
+
+th,
+td {
+
+  border: 1px solid var(--line);
+
+  text-align: center;
+
+  padding: 10px 8px;
+
+  height: 55px;
+
+  /* Force normal table text to BLACK */
+  color: #000000;
+}
+
+
+/* =========================================================
+   12. TABLE HEADER
+   ========================================================= */
+
+thead th {
+
+  background: var(--purple);
+
+  /* Main purple header text is WHITE */
+  color: #ffffff;
+
+  font-weight: 800;
+
+  line-height: 1.05;
+}
+
+
+/* Smaller text inside medal headers */
+
+thead th small {
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   13. TABLE COLUMN WIDTHS
+   ========================================================= */
+
+.rank-col {
+
+  width: 9%;
+}
+
+
+.change-col {
+
+  width: 14%;
+}
+
+
+.dept-col {
+
+  width: 29%;
+
+  text-align: left;
+}
+
+
+.medal {
+
+  width: 11%;
+}
+
+
+.total-head {
+
+  width: 15%;
+}
+
+
+/* =========================================================
+   14. GOLD HEADER
+   ========================================================= */
+
+.gold-head {
+
+  background: linear-gradient(
+    #e7c12d,
+    #d2aa12
+  );
+
+  /* Black text on gold */
+  color: #161616;
+}
+
+
+/* =========================================================
+   15. SILVER HEADER
+   ========================================================= */
+
+.silver-head {
+
+  background: linear-gradient(
+    #e4e7e9,
+    #bfc4c8
+  );
+
+  /* Black text on silver */
+  color: #161616;
+}
+
+
+/* =========================================================
+   16. BRONZE HEADER
+   ========================================================= */
+
+.bronze-head {
+
+  background: linear-gradient(
+    #d49b5f,
+    #ae733a
+  );
+
+  /* Black text on bronze */
+  color: #161616;
+}
+
+
+/* Total Points header */
+
+.total-head {
+
+  background: var(--purple);
+
+  /* White text on purple */
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   17. TABLE BODY
+   ========================================================= */
+
+/*
+   IMPORTANT:
+
+   All department rows have:
+   - White/light backgrounds
+   - BLACK text
+
+   This prevents dark-mode/browser settings from
+   turning the text white or very light.
+*/
+
+tbody tr {
+
+  background: #ffffff;
+
+  color: #000000;
+
+  transition: background .15s ease;
+}
+
+
+/* Table row hover */
+
+tbody tr:hover {
+
+  background: #f3ecfa;
+
+  /* Keep text black when hovering */
+  color: #000000;
+}
+
+
+/* =========================================================
+   18. FORCE EVERY TABLE BODY ELEMENT TO BLACK
+   ========================================================= */
+
+/*
+   This is the main protection against the problem
+   shown in the screenshot.
+
+   Even if the browser is using dark mode,
+   department names, ranks, medal numbers and
+   total points will remain BLACK.
+*/
+
+tbody,
+tbody tr,
+tbody td,
+tbody .dept,
+tbody .total {
+
+  color: #000000;
+}
+
+
+/* =========================================================
+   19. DEPARTMENT NAME
+   ========================================================= */
+
+tbody .dept {
+
+  text-align: left;
+
+  font-size: 18px;
+
+  color: #000000;
+}
+
+
+/* =========================================================
+   20. TOTAL POINTS
+   ========================================================= */
+
+tbody .total {
+
+  font-size: 20px;
+
+  font-weight: 800;
+
+  color: #000000;
+}
+
+
+/* =========================================================
+   21. MEDAL INPUT BOXES
+   ========================================================= */
+
+/*
+   These are the editable Gold / Silver / Bronze
+   number fields.
+*/
+
+.medal-input {
+
+  width: 100%;
+
+  max-width: 56px;
+
+  font: inherit;
+
+  text-align: center;
+
+  /* BLACK number text */
+  color: #000000;
+
+  border: 1px solid transparent;
+
+  border-radius: 4px;
+
+  background: transparent;
+
+  padding: 4px;
+}
+
+
+/* Input focus */
+
+.medal-input:focus {
+
+  border-color: var(--purple-light);
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #000000;
+}
+
+
+/* =========================================================
+   22. FIRST PLACE / LEADER ROW
+   ========================================================= */
+
+.leader {
+
+  background: #e7f6e9;
+
+  /* Keep leader text BLACK */
+  color: #000000;
+}
+
+
+/* Make sure all leader cells stay black */
+
+.leader td {
+
+  color: #000000;
+}
+
+
+/* Green left border on leader row */
+
+.leader td:first-child {
+
+  border-left: 3px solid #8fbe73;
+}
+
+
+/* =========================================================
+   23. THIRD PLACE / FOOD-TECH STYLE ROW
+   ========================================================= */
+
+/*
+   Your HTML/JS can apply the class "food-tech"
+   if you want a special left border for Food Technology.
+*/
+
+.food-tech {
+
+  color: #000000;
+}
+
+
+/* Left border for Food Technology row */
+
+.food-tech td:first-child {
+
+  border-left: 3px solid #8fbe73;
+}
+
+
+/* =========================================================
+   24. RANK CHANGE — UP
+   ========================================================= */
+
+.up {
+
+  color: var(--green);
+
+  font-weight: 800;
+
+  font-size: 21px;
+}
+
+
+/* =========================================================
+   25. RANK CHANGE — DOWN
+   ========================================================= */
+
+.down {
+
+  color: var(--red);
+
+  font-weight: 800;
+
+  font-size: 21px;
+}
+
+
+/* =========================================================
+   26. RANK CHANGE — SAME
+   ========================================================= */
+
+.same {
+
+  color: #000000;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   27. TIE INFORMATION
+   ========================================================= */
+
+.tie-note {
+
+  font-size: 14px;
+
+  margin: 8px 0 0;
+
+  color: #000000;
+}
+
+
+/* =========================================================
+   28. FOOTER
+   ========================================================= */
+
+.footer {
+
+  margin-top: 14px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+
+/* =========================================================
+   29. DOWNLOAD SCREENSHOT BUTTON
+   ========================================================= */
+
+.download-btn {
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: #1d5666;
+
+  color: #ffffff;
+
+  padding: 11px 17px;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 2px 3px rgba(0,0,0,.16);
+}
+
+
+/* Download button hover */
+
+.download-btn:hover {
+
+  background: #174554;
+}
+
+
+/* Disabled download button */
+
+.download-btn:disabled {
+
+  cursor: default;
+
+  opacity: .7;
+}
+
+
+/* Social media / website text */
+
+.social {
+
+  font-size: 15px;
+
+  color: #000000;
+}
+
+
+/* =========================================================
+   30. TABLET / SMALLER SCREENS
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+
+  /* Smaller side label */
+
+  .side-label {
+
+    width: 58px;
+
+    flex-basis: 58px;
+  }
+
+
+  /* Smaller vertical label text */
+
+  .side-label span {
+
+    font-size: 18px;
+  }
+
+
+  /* Reduce content padding */
+
+  .content {
+
+    padding: 18px 12px;
+  }
+
+
+  /* Smaller header columns */
+
+  .header {
+
+    grid-template-columns: 70px 1fr 70px;
+
+    gap: 7px;
+  }
+
+
+  /* Smaller logos */
+
+  .logo {
+
+    width: 65px;
+
+    height: 65px;
+  }
+
+
+  /* Smaller college heading */
+
+  .heading h1 {
+
+    font-size: 18px;
+  }
+
+
+  /* Smaller subtitle */
+
+  .subtitle {
+
+    font-size: 13px;
+
+    margin-top: 6px;
+  }
+
+
+  /* Smaller updated text */
+
+  .updated {
+
+    font-size: 12px;
+  }
+
+
+  /* Smaller point system */
+
+  .points-bar {
+
+    font-size: 13px;
+  }
+
+
+  /* Smaller save button */
+
+  .status {
+
+    padding: 6px 8px;
+  }
+
+
+  /* Stack footer elements */
+
+  .footer {
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    text-align: center;
+  }
+}
+
+
+/* =========================================================
+   31. MOBILE SCREENS
+   ========================================================= */
+
+@media (max-width: 520px) {
+
+
+  /* Remove horizontal flex layout */
+
+  .page-shell {
+
+    display: block;
+  }
+
+
+  /* Convert side label to horizontal bar */
+
+  .side-label {
+
+    width: 100%;
+
+    height: 42px;
+
+    border-radius: 0 0 14px 14px;
+  }
+
+
+  /* Horizontal tournament label */
+
+  .side-label span {
+
+    writing-mode: horizontal-tb;
+
+    transform: none;
+
+    font-size: 16px;
+  }
+
+
+  /* Smaller header columns */
+
+  .header {
+
+    grid-template-columns: 55px 1fr 55px;
+  }
+
+
+  /* Smaller mobile logos */
+
+  .logo {
+
+    width: 52px;
+
+    height: 52px;
+  }
+
+
+  /* Smaller college heading */
+
+  .heading h1 {
+
+    font-size: 14px;
+  }
+
+
+  /* Smaller subtitle */
+
+  .subtitle {
+
+    font-size: 10px;
+  }
+
+
+  /* Smaller updated text */
+
+  .updated {
+
+    font-size: 9px;
+  }
+
+
+  /* Stack point system and button */
+
+  .points-bar {
+
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  /* Move save button to the right */
+
+  .status {
+
+    align-self: flex-end;
+  }
+}
+
+
+/* =========================================================
+   END OF STYLESHEET
+   ========================================================= */

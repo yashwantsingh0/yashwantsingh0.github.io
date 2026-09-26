@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<meta name="theme-color" content="#4b1978">
+
+<title>Medal Tally 2026–2027 | BCAS</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+
+</head>
+
+<body>
+  <!-- =========================================================
+       PAGE LAYOUT
+       The vertical label is kept separate from the main content.
+       ========================================================= -->
+
+  <div class="page-shell">
+
+    <aside class="side-label"><span>Inter Departmental Tournaments</span></aside>
+
+    <main class="content">
+
+      <!-- Header: college logos + page title -->
+      <header class="header">
+
+        <img src="left-logo.png" class="logo logo-left" alt="Titiksha logo">
+
+        <div class="heading">
+
+          <h1>BHASKARACHARYA COLLEGE OF APPLIED<br>SCIENCES, UNIVERSITY OF DELHI</h1>
+
+          <div class="subtitle"><strong>MEDAL TALLY 2026–2027</strong><span> – Inter-Departmental Tournaments</span></div>
+
+          <div class="updated"><strong>Last Updated:</strong> <span id="updated-time">Not yet saved</span></div>
+
+        </div>
+
+        <img src="right-logo.png" class="logo logo-right" alt="Bhaskaracharya College of Applied Sciences logo">
+
+      </header>
+
+      <!-- Point system and ranking save control -->
+      <section class="points-bar">
+
+        <div>
+
+          <strong>Point System:</strong>
+
+          <span class="gold-text">Gold</span> (30 pts),
+
+          <span class="silver-text">Silver</span> (20 pts),
+
+          <span class="bronze-text">Bronze</span> (10 pts)
+
+        </div>
+
+        <button class="status" id="saveBtn" type="button">Save &amp; Update Rankings</button>
+
+      </section>
+
+      <!-- Main medal tally table -->
+      <section class="table-card">
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th class="rank-col">Rank</th>
+
+                <th class="change-col">Change</th>
+
+                <th class="dept-col">Department</th>
+
+                <th class="medal gold-head">Gold<br><small>(30 pts)</small></th>
+
+                <th class="medal silver-head">Silver<br><small>(20 pts)</small></th>
+
+                <th class="medal bronze-head">Bronze<br><small>(10 pts)</small></th>
+
+                <th class="total-head">Total<br>Points</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="tbody"></tbody>
+
+          </table>
+
+        </div>
+
+        <div class="tie-note">Ties broken by Gold medal count, then Silver count. Rank updates automatically as you edit medal counts.</div>
+
+      </section>
+
+      <!-- Footer: screenshot export + social handle -->
+      <footer class="footer">
+
+        <button class="download-btn" id="downloadBtn" type="button">Download Screenshot for Group</button>
+
+        <div class="social">web: <strong>sports_bcas</strong> | IG: <strong>@sports_bcas</strong></div>
+
+      </footer>
+
+    </main>
+
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+
+(function(){
+
+  var STORAGE_KEY = 'bcas_medal_tally_v1';
+
+  var departments = [
+
+    {id:0, name:'Microbiology', gold:5, silver:3, bronze:1, prevRank:7},
+
+    {id:1, name:'Computer Science', gold:3, silver:5, bronze:1, prevRank:1},
+
+    {id:2, name:'Food technology', gold:6, silver:0, bronze:1, prevRank:2},
+
+    {id:3, name:'Instrumentation', gold:4, silver:1, bronze:1, prevRank:3},
+
+    {id:4, name:'Electronics', gold:2, silver:2, bronze:3, prevRank:4},
+
+    {id:5, name:'Biomedical Science', gold:0, silver:4, bronze:3, prevRank:5},
+
+    {id:6, name:'Botany', gold:0, silver:2, bronze:4, prevRank:6},
+
+    {id:7, name:'Chemistry', gold:0, silver:2, bronze:0, prevRank:8},
+
+    {id:8, name:'Polymer Science', gold:0, silver:0, bronze:1, prevRank:9},
+
+    {id:9, name:'Zoology', gold:0, silver:0, bronze:1, prevRank:10},
+
+    {id:10, name:'Physics', gold:0, silver:0, bronze:0, prevRank:11}
+
+  ];
+
+  var lastUpdated = null;
+
+  function load(){
+
+    try {
+
+      var raw = localStorage.getItem(STORAGE_KEY);
+
+      if (raw) {
+
+        var parsed = JSON.parse(raw);
+
+        if (parsed.departments) departments = parsed.departments;
+
+        if (parsed.lastUpdated) lastUpdated = parsed.lastUpdated;
+
+      }
+
+    } catch(e) {}
+
+  }
+
+  function persist(){
+
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({departments: departments, lastUpdated: lastUpdated})); }
+
+    catch(e) {}
+
+  }
+
+  function getRanked(){
+
+    return departments.map(function(d){
+
+      return Object.assign({}, d, {total: d.gold*30 + d.silver*20 + d.bronze*10});
+
+    }).sort(function(a,b){
+
+      return b.total - a.total || b.gold - a.gold || b.silver - a.silver;
+
+    });
+
+  }
+
+  var tbody = document.getElementById('tbody');
+
+  function renderRows(){
+
+    var active = document.activeElement;
+
+    var restoreId = null, restoreField = null, restoreSel = null;
+
+    if (active && active.classList && active.classList.contains('medal-input')) {
+
+      restoreId = active.dataset.id;
+
+      restoreField = active.dataset.field;
+
+      restoreSel = active.selectionStart;
+
+    }
+
+    var ranked = getRanked();
+
+    var html = ranked.map(function(d, i){
+
+      var rank = i + 1;
+
+      var diff = d.prevRank - rank;
+
+      var changeHtml, changeClass;
+
+      if (diff > 0) { changeHtml = '\u2191' + diff; changeClass = 'up'; }
+
+      else if (diff < 0) { changeHtml = '\u2193' + Math.abs(diff); changeClass = 'down'; }
+
+      else { changeHtml = 'Same'; changeClass = 'same'; }
+
+      var rowClass = rank === 1 ? 'leader' : (rank === 3 ? 'rank-third' : '');
+
+      return '<tr class="' + rowClass + '">' +
+
+        '<td>' + rank + '</td>' +
+
+        '<td class="' + changeClass + '">' + changeHtml + '</td>' +
+
+        '<td class="dept">' + d.name + '</td>' +
+
+        '<td><input type="number" min="0" class="medal-input" data-id="' + d.id + '" data-field="gold" value="' + d.gold + '"></td>' +
+
+        '<td><input type="number" min="0" class="medal-input" data-id="' + d.id + '" data-field="silver" value="' + d.silver + '"></td>' +
+
+        '<td><input type="number" min="0" class="medal-input" data-id="' + d.id + '" data-field="bronze" value="' + d.bronze + '"></td>' +
+
+        '<td class="total">' + d.total + '</td>' +
+
+      '</tr>';
+
+    }).join('');
+
+    tbody.innerHTML = html;
+
+    if (restoreId !== null) {
+
+      var el = tbody.querySelector('.medal-input[data-id="' + restoreId + '"][data-field="' + restoreField + '"]');
+
+      if (el) { el.focus(); try { el.setSelectionRange(restoreSel, restoreSel); } catch(e) {} }
+
+    }
+
+  }
+
+  function updateTimestamp(){
+
+    var span = document.getElementById('updated-time');
+
+    if (lastUpdated) {
+
+      var d = new Date(lastUpdated);
+
+      span.textContent = d.toLocaleString();
+
+    } else {
+
+      span.textContent = 'Not yet saved';
+
+    }
+
+  }
+
+  tbody.addEventListener('input', function(e){
+
+    var t = e.target;
+
+    if (!t.classList.contains('medal-input')) return;
+
+    var id = Number(t.dataset.id);
+
+    var field = t.dataset.field;
+
+    var val = Math.max(0, parseInt(t.value, 10) || 0);
+
+    var dept = departments.filter(function(d){ return d.id === id; })[0];
+
+    dept[field] = val;
+
+    renderRows();
+
+    persist();
+
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', function(){
+
+    var btn = this;
+
+    var ranked = getRanked();
+
+    ranked.forEach(function(d, i){
+
+      var orig = departments.filter(function(o){ return o.id === d.id; })[0];
+
+      orig.prevRank = i + 1;
+
+    });
+
+    lastUpdated = new Date().toISOString();
+
+    persist();
+
+    renderRows();
+
+    updateTimestamp();
+
+    var original = btn.textContent;
+
+    btn.textContent = 'Saved!';
+
+    btn.disabled = true;
+
+    setTimeout(function(){ btn.textContent = original; btn.disabled = false; }, 1500);
+
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', function(){
+
+    var btn = this;
+
+    var original = btn.textContent;
+
+    btn.disabled = true;
+
+    btn.textContent = 'Preparing image...';
+
+    html2canvas(document.querySelector('.table-card'), {scale: 2, backgroundColor: '#ffffff'}).then(function(canvas){
+
+      var link = document.createElement('a');
+
+      var dateStr = new Date().toISOString().slice(0,10);
+
+      link.download = 'medal-tally-' + dateStr + '.png';
+
+      link.href = canvas.toDataURL('image/png');
+
+      link.click();
+
+    }).catch(function(){
+
+      alert('Could not generate the image. Please try again.');
+
+    }).finally(function(){
+
+      btn.disabled = false;
+
+      btn.textContent = original;
+
+    });
+
+  });
+
+  load();
+
+  renderRows();
+
+  updateTimestamp();
+
+})();
+
+</script>
+
+</body>
+
+</html>  <script src="script.js"></script>
